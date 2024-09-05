@@ -1,0 +1,105 @@
+/*  Design mit harmonierenden Farbtönen */
+body {
+    font-family: 'Arial', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f0f4ff; /* Helles Blau */
+    margin: 0;
+    color: #333;
+  }
+  
+  /* Container-Styling */
+  .container {
+    text-align: center;
+    background-color: #fff;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    width: 400px;
+  }
+  
+  /* H1 Styling */
+  h1 {
+    color: #4a47a3; /* Violett-Ton */
+    margin-bottom: 20px;
+  }
+  
+  /* Modernes Button-Design */
+  .btn {
+    padding: 12px 25px;
+    background-color: #4a47a3; /* Violett-Ton */
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    margin-bottom: 20px;
+  }
+  
+  .btn:hover {
+    background-color: #6f6ab1; /* Helleres Violett beim Hover */
+    transform: translateY(-3px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  }
+  
+  .reset-btn {
+    background-color: #ff6f61; /* Warmes Orange-Rot für Reset */
+  }
+  
+  .reset-btn:hover {
+    background-color: #ff8a7d; /* Hellere Version beim Hover */
+  }
+  
+  /* Output-Bereich mit sanfter Animation */
+  .output {
+    font-size: 24px;
+    color: #4a47a3;
+    margin: 20px 0;
+    height: 50px;
+    font-weight: bold;
+    opacity: 0;
+    transform: scale(0.8);
+    transition: all 0.5s ease;
+  }
+  
+  .output.show {
+    opacity: 1;
+    transform: scale(1);
+  }
+  
+  /* Flexibles Listen-Styling */
+  .lists {
+    display: flex;
+    justify-content: space-around;
+  }
+  
+  ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  h2 {
+    color: #4a47a3;
+    font-size: 18px;
+    margin-bottom: 10px;
+  }
+  
+  /* Modernes Styling der Listenpunkte */
+  li {
+    background-color: #f0f4ff;
+    margin: 5px 0;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #4a47a3;
+    color: #333;
+    transition: background-color 0.3s ease;
+  }
+  
+  li:hover {
+    background-color: #dfe7ff;
+  }
+  
