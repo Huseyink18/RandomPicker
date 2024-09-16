@@ -1,85 +1,104 @@
-// Liste der Schülernamen
-const schueler = ["Yasin", "Thomas", "Fabio", "Hüseyin", "Oguz", 
-    "Daniel", "Kevin", "Lara", "Julian", "Ju", 
-    "Maryam", "Alireza"];
-  
-  // Prüfe, ob Fortschritt in localStorage vorhanden ist
-  // Speichert die Daten in der Seite
-  let remainingSchueler = JSON.parse(localStorage.getItem('remainingSchueler')) || [...schueler];
-  let selectedSchueler = JSON.parse(localStorage.getItem('selectedSchueler')) || [];
-  
-  // Funktion, um die Listen der Schüler im DOM zu aktualisieren
-  function updateLists() {
+// Deine Schülerliste
+const schueler = ["Yasin", "Thomas", "Fabio", "Hüseyin", "Oguz", "Daniel", "Kevin", "Lara", "Julian", "Ju", "Maryam", "Alireza"];
+
+// Liste der anwesenden Schüler (diese wird durch die Anwesenheitsauswahl gefüllt)
+let anwesendeSchueler = [];
+
+// Liste der verbleibenden Schüler für den Random-Picker
+let remainingSchueler = [];
+
+// Liste der bereits ausgewählten Schüler
+let selectedSchueler = [];
+
+// Funktion, um die Anwesenheitsauswahl im DOM anzuzeigen
+function createAttendanceList() {
+    const attendanceList = document.querySelector('#attendanceList');
+    attendanceList.innerHTML = '';
+
+    schueler.forEach((schuelerName) => {
+        const li = document.createElement('li');
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.checked = "true";
+        checkbox.id = schuelerName;
+
+        const label = document.createElement('label');
+        label.htmlFor = schuelerName;
+        label.innerText = schuelerName;
+
+        li.appendChild(checkbox);
+        li.appendChild(label);
+        attendanceList.appendChild(li);
+    });
+}
+
+// Funktion, um die ausgewählten Schüler als anwesend zu speichern
+function markAttendance() {
+    const checkedBoxes = document.querySelectorAll('#attendanceList input:checked');
+    anwesendeSchueler = Array.from(checkedBoxes).map(box => box.id);
+    remainingSchueler = [...anwesendeSchueler];  // Setze die anwesenden Schüler als verbleibende Schüler
+    updateRemainingList();
+}
+
+// Funktion, um die Liste der verbleibenden Schüler im DOM anzuzeigen
+function updateRemainingList() {
     const remainingList = document.querySelector('#remainingList');
-    const selectedList = document.querySelector('#selectedList');
-  
-    // Liste der verbleibenden Schüler aktualisieren
     remainingList.innerHTML = '';
-    remainingSchueler.forEach(schueler => {
-      const li = document.createElement('li');
-      li.innerText = schueler;
-      remainingList.appendChild(li);
+
+    remainingSchueler.forEach((schuelerName) => {
+        const li = document.createElement('li');
+        li.innerText = schuelerName;
+        remainingList.appendChild(li);
     });
-  
-    // Liste der ausgewählten Schüler aktualisieren
+
+    const selectedList = document.querySelector('#selectedList');
     selectedList.innerHTML = '';
-    selectedSchueler.forEach(schueler => {
-      const li = document.createElement('li');
-      li.innerText = schueler;
-      selectedList.appendChild(li);
+
+    selectedSchueler.forEach((schuelerName) => {
+        const li = document.createElement('li');
+        li.innerText = schuelerName;
+        selectedList.appendChild(li);
     });
-  }
-  
-  // Funktion, um Fortschritt in localStorage zu speichern
-  function saveProgress() {
-    localStorage.setItem('remainingSchueler', JSON.stringify(remainingSchueler));
-    localStorage.setItem('selectedSchueler', JSON.stringify(selectedSchueler));
-  }
-  
-  // Funktion, um einen Schüler zufällig auszuwählen
-  function pickRandomSchueler() {
+}
+
+// Funktion, um einen anwesenden Schüler zufällig auszuwählen
+function pickRandomSchueler() {
     if (remainingSchueler.length === 0) {
-    // Wenn alle Schüler schon drangekommen sind, Liste zurücksetzen
-    remainingSchueler = [...schueler];
-    selectedSchueler = [];
-    alert('Alle Schüler waren dran, beginnt von vorne!');
+        alert('Keine Schüler mehr übrig, beginnt von vorne!');
+        resetSchueler();
+        return;
     }
-  
-    // Zufälligen Index auswählen
+
     const randomIndex = Math.floor(Math.random() * remainingSchueler.length);
     const selected = remainingSchueler[randomIndex];
-  
-    // Entfernen des ausgewählten Schülers und hinzufügen zur ausgewählten Liste
+
+    // Entfernen des ausgewählten Schülers aus der verbleibenden Liste und hinzufügen zur ausgewählten Liste
     remainingSchueler.splice(randomIndex, 1);
     selectedSchueler.push(selected);
-  
-    // Ausgewählten Schüler im DOM anzeigen mit Animation
+
+    // Zeige den ausgewählten Schüler an
     const output = document.querySelector('#output');
-    output.innerText = selected;
-    output.classList.remove('show');
-    setTimeout(() => {
-      output.classList.add('show');
-    }, 100); // Verzögerung für die Animation
-  
-    // Listen und Fortschritt aktualisieren
-    updateLists();
-    saveProgress();
-  }
-  
-  // Funktion, um Fortschritt zurückzusetzen
-  function resetSchueler() {
-    remainingSchueler = [...schueler];
+    output.innerText = `${selected} wurde ausgewählt!`;
+
+    // Aktualisiere die Listen
+    updateRemainingList();
+}
+
+// Funktion, um die Listen zurückzusetzen
+function resetSchueler() {
+    remainingSchueler = [...anwesendeSchueler];
     selectedSchueler = [];
-    updateLists();
-    saveProgress();
-  }
-  
-  // Event Listener für den Button "Nächster Schüler"
-  document.querySelector('#randomizeBtn').addEventListener('click', pickRandomSchueler);
-  
-  // Event Listener für Reset Button
-  document.querySelector('#resetBtn').addEventListener('click', resetSchueler);
-  
-  // Initiale Anzeige der Listen
-  updateLists();
-  
+    updateRemainingList();
+}
+
+// Event Listener für den Button "Anwesende Schüler übernehmen"
+document.querySelector('#markAttendanceBtn').addEventListener('click', markAttendance);
+
+// Event Listener für den Button "Nächster Schüler"
+document.querySelector('#randomizeBtn').addEventListener('click', pickRandomSchueler);
+
+// Event Listener für Reset Button
+document.querySelector('#resetBtn').addEventListener('click', resetSchueler);
+
+// Initiale Anzeige der Anwesenheitsliste
+createAttendanceList();
